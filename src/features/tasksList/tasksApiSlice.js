@@ -11,7 +11,7 @@ export const tasksApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getTasks: builder.query({
       query: () => ({
-        url: '/notes',
+        url: '/tasks',
         validateStatus: (response, result) => {
             return response.status === 200 && !result.isError
         },
