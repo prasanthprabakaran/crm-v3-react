@@ -18,7 +18,7 @@ const Welcome = () => {
         <Link to="/dash/tasks">View Tasks</Link>
       </p>
       <p>
-        <Link to="/dash/tasks/new">Add New techNote</Link>
+        <Link to="/dash/tasks/new">Add New Task</Link>
       </p>
       {(isManager || isAdmin) && (
         <p>

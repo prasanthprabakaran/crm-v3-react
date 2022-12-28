@@ -30,7 +30,7 @@ const TaskList = () => {
       filteredIds = [...ids];
     } else {
       filteredIds = ids.filter(
-        (noteId) => entities[noteId].username === username
+        (taskId) => entities[taskId].username === username
       );
     }
 
