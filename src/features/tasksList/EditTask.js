@@ -1,18 +1,38 @@
-import { useParams } from 'react-router-dom'
-import { useSelector } from 'react-redux'
-import { selectTaskById } from './tasksApiSlice'
-import { selectAllUsers } from '../users/usersApiSlice'
-import EditTaskForm from './EditTaskForm'
+import { useParams } from "react-router-dom";
+import EditTaskForm from "./EditTaskForm";
+import { useGetTasksQuery } from "./tasksApiSlice";
+import { useGetUsersQuery } from "../users/usersApiSlice";
+import useAuth from "../../hooks/useAuth";
+import { PulseLoader } from "react-spinners";
 
 const EditTask = () => {
-  const { id } = useParams()
+  const { id } = useParams();
 
-  const task = useSelector(state => selectTaskById(state, id))
-  const users = useSelector(selectAllUsers)
+  const { username, isManager, isAdmin } = useAuth();
 
-  const content = task && users ? <EditTaskForm task={task} users={users} /> : <p>Loading...</p>
+  const { task } = useGetTasksQuery("tasksList", {
+    selectFromResult: ({ data }) => ({
+      task: data?.entities[id],
+    }),
+  });
 
-  return content
-}
+  const { users } = useGetUsersQuery("usersList", {
+    selectFromResult: ({ data }) => ({
+      users: data?.ids.map((id) => data?.entities[id]),
+    }),
+  });
 
-export default EditTask
+  if (!task || !users?.length) return <PulseLoader color={"#FFF"} />;
+
+  if (!isManager && !isAdmin) {
+    if (task.username !== username) {
+      return <p className="errmsg">No access</p>;
+    }
+  }
+
+  const content = <EditTaskForm task={task} users={users} />;
+
+  return content;
+};
+
+export default EditTask;

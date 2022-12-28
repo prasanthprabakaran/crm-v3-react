@@ -1,15 +1,19 @@
-import { useSelector } from 'react-redux'
-import { selectAllUsers } from '../users/usersApiSlice'
-import NewTaskForm from './NewTaskForm'
+import NewTaskForm from "./NewTaskForm";
+import { useGetUsersQuery } from "../users/usersApiSlice";
+import PulseLoader from "react-spinners/PulseLoader";
 
 const NewTask = () => {
-  const users = useSelector(selectAllUsers)
+  const { users } = useGetUsersQuery("usersList", {
+    selectFromResult: ({ data }) => ({
+      users: data?.ids.map((id) => data?.entities[id]),
+    }),
+  });
 
-  if (!users?.length) return <p>Not Currently Available</p>
+  if (!users?.length) return <PulseLoader color={"#FFF"} />;
 
-  const content = <NewTaskForm users={users} />
+  const content = <NewTaskForm users={users} />;
 
-  return content
-}
+  return content;
+};
 
-export default NewTask
+export default NewTask;

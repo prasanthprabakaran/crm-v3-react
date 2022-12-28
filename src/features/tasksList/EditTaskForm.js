@@ -3,8 +3,11 @@ import { useUpdateTaskMutation, useDeleteTaskMutation } from "./tasksApiSlice"
 import { useNavigate } from "react-router-dom"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSave, faTrashCan } from "@fortawesome/free-solid-svg-icons"
+import useAuth from "../../hooks/useAuth"
 
 const EditTaskForm = ({ task, users }) => {
+
+    const { isManager, isAdmin } = useAuth()
 
     const [updateTask, {
         isLoading,
@@ -73,6 +76,45 @@ const EditTaskForm = ({ task, users }) => {
 
     const errContent = (error?.data?.message || delerror?.data?.message) ?? ''
 
+    let deleteButton = null
+    if (isManager || isAdmin) {
+        deleteButton = (
+            <button
+                className="icon-button"
+                title="Delete"
+                onClick={onDeleteTaskClicked}
+            >
+                <FontAwesomeIcon icon={faTrashCan} />
+            </button>
+        )
+    }
+
+    let assignedButton = null
+    if (isManager || isAdmin) {
+        assignedButton = (
+                <select
+                    id="task-username"
+                    name="username"
+                    className="form__select"
+                    value={userId}
+                    onChange={onUserIdChanged}
+                >
+                    {options}
+                </select>
+        )
+    } else {
+        assignedButton = (
+            <select
+                id="task-username"
+                name="username"
+                className="form__select"
+                value={userId}
+            >
+                {options}
+            </select>
+    )
+    }
+
     const content = (
         <>
             <p className={errClass}>{errContent}</p>
@@ -89,13 +131,7 @@ const EditTaskForm = ({ task, users }) => {
                         >
                             <FontAwesomeIcon icon={faSave} />
                         </button>
-                        <button
-                            className="icon-button"
-                            title="Delete"
-                            onClick={onDeleteTaskClicked}
-                        >
-                            <FontAwesomeIcon icon={faTrashCan} />
-                        </button>
+                        {deleteButton}
                     </div>
                 </div>
                 <label className="form__label" htmlFor="task-title">

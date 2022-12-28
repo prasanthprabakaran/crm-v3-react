@@ -1,29 +1,41 @@
 import { useGetTasksQuery } from "./tasksApiSlice";
 import Task from "./Task";
+import useAuth from "../../hooks/useAuth";
+import PulseLoader from "react-spinners/PulseLoader";
 
 const TaskList = () => {
+  const { username, isManager, isAdmin } = useAuth();
+
   const {
     data: tasks,
     isLoading,
     isSuccess,
     isError,
     error,
-  } = useGetTasksQuery('tasksList', {
+  } = useGetTasksQuery("tasksList", {
     pollingInterval: 15000,
     refetchOnFocus: true,
     refetchOnMountOrArgChange: true,
   });
   let content;
-  if (isLoading) content = <p>Loading...</p>;
+  if (isLoading) content = <PulseLoader color={"#FFF"} />;
   if (isError) {
     content = <p className="errmsg">{error?.data?.message}</p>;
   }
   if (isSuccess) {
-    const { ids } = tasks;
+    const { ids, entities } = tasks;
+
+    let filteredIds;
+    if (isManager || isAdmin) {
+      filteredIds = [...ids];
+    } else {
+      filteredIds = ids.filter(
+        (noteId) => entities[noteId].username === username
+      );
+    }
 
     const tableContent = ids?.length
-      ? ids.map((taskId) => <Task key={taskId} taskId={taskId} />)
-      : null;
+      && filteredIds.map((taskId) => <Task key={taskId} taskId={taskId} />)
 
     content = (
       <table className="table table--notes">

@@ -2,12 +2,16 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPenToSquare } from "@fortawesome/free-solid-svg-icons"
 import { useNavigate } from 'react-router-dom'
 
-import { useSelector } from 'react-redux'
-import { selectTaskById } from './tasksApiSlice'
+import { useGetTasksQuery } from './tasksApiSlice'
+import { memo } from 'react'
 
 const Task = ({ taskId }) => {
 
-    const task = useSelector(state => selectTaskById(state, taskId))
+    const { task } = useGetTasksQuery("tasksList", {
+        selectFromResult: ({ data }) => ({
+            task: data?.entities[taskId]
+        }),
+    })
 
     const navigate = useNavigate()
 
@@ -20,16 +24,16 @@ const Task = ({ taskId }) => {
 
         return (
             <tr className="table__row">
-                <td className="table__cell task__status">
+                <td className="table__cell note__status">
                     {task.completed
-                        ? <span className="task__status--completed">Completed</span>
-                        : <span className="task__status--open">Open</span>
+                        ? <span className="note__status--completed">Completed</span>
+                        : <span className="note__status--open">Open</span>
                     }
                 </td>
-                <td className="table__cell task__created">{created}</td>
-                <td className="table__cell task__updated">{updated}</td>
-                <td className="table__cell task__title">{task.title}</td>
-                <td className="table__cell task__username">{task.username}</td>
+                <td className="table__cell note__created">{created}</td>
+                <td className="table__cell note__updated">{updated}</td>
+                <td className="table__cell note__title">{task.title}</td>
+                <td className="table__cell note__username">{task.username}</td>
 
                 <td className="table__cell">
                     <button
@@ -44,4 +48,6 @@ const Task = ({ taskId }) => {
 
     } else return null
 }
-export default Task
+
+const memoizedTask = memo(Task)
+export default memoizedTask
