@@ -89,31 +89,6 @@ const EditTaskForm = ({ task, users }) => {
         )
     }
 
-    let assignedButton = null
-    if (isManager || isAdmin) {
-        assignedButton = (
-                <select
-                    id="task-username"
-                    name="username"
-                    className="form__select"
-                    value={userId}
-                    onChange={onUserIdChanged}
-                >
-                    {options}
-                </select>
-        )
-    } else {
-        assignedButton = (
-            <select
-                id="task-username"
-                name="username"
-                className="form__select"
-                value={userId}
-            >
-                {options}
-            </select>
-    )
-    }
 
     const content = (
         <>
@@ -176,7 +151,8 @@ const EditTaskForm = ({ task, users }) => {
                             name="username"
                             className="form__select"
                             value={userId}
-                            onChange={onUserIdChanged}
+                            // onChange={onUserIdChanged}
+                            onChange={isManager || isAdmin ? onUserIdChanged : null}
                         >
                             {options}
                         </select>
