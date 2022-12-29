@@ -28,6 +28,7 @@ const EditTaskForm = ({ task, users }) => {
     const [text, setText] = useState(task.text)
     const [completed, setCompleted] = useState(task.completed)
     const [userId, setUserId] = useState(task.user)
+    const [userName, setUserName] = useState(task.username)
 
     useEffect(() => {
 
@@ -154,7 +155,7 @@ const EditTaskForm = ({ task, users }) => {
                             // onChange={onUserIdChanged}
                             onChange={isManager || isAdmin ? onUserIdChanged : null}
                         >
-                            {options}
+                            { isManager|| isAdmin ? options : userName}
                         </select>
                     </div>
                     <div className="form__divider">
