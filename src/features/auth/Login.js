@@ -57,7 +57,20 @@ const Login = () => {
 
   const errClass = errMsg ? "errmsg" : "offscreen";
 
-  if (isLoading) return <PulseLoader color={"#FFF"} />;
+  if (isLoading)
+    return (
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          flexDirection: "column",
+          paddingTop: "20px",
+        }}
+      >
+        <PulseLoader color={"#FFF"} />;
+      </div>
+    );
 
   const content = (
     <section className="public">

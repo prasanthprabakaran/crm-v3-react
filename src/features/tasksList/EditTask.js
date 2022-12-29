@@ -22,7 +22,19 @@ const EditTask = () => {
     }),
   });
 
-  if (!task || !users?.length) return <PulseLoader color={"#FFF"} />;
+  if (!task || !users?.length) return (
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        flexDirection: "column",
+        paddingTop: "20px",
+      }}
+    >
+      <PulseLoader color={"#FFF"} />;
+    </div>
+  );
 
   if (!isManager && !isAdmin) {
     if (task.username !== username) {

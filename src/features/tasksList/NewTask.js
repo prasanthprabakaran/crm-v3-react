@@ -9,7 +9,19 @@ const NewTask = () => {
     }),
   });
 
-  if (!users?.length) return <PulseLoader color={"#FFF"} />;
+  if (!users?.length) return (
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        flexDirection: "column",
+        paddingTop: "20px",
+      }}
+    >
+      <PulseLoader color={"#FFF"} />;
+    </div>
+  );
 
   const content = <NewTaskForm users={users} />;
 

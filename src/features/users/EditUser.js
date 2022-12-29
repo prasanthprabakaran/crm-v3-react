@@ -12,7 +12,19 @@ const EditUser = () => {
         }),
     })
 
-    if (!user) return <PulseLoader color={"#FFF"} />
+    if (!user) return (
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            flexDirection: "column",
+            paddingTop: "20px",
+          }}
+        >
+          <PulseLoader color={"#FFF"} />;
+        </div>
+      );
 
     const content = <EditUserForm user={user} />
 

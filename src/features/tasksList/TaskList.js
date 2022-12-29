@@ -18,7 +18,21 @@ const TaskList = () => {
     refetchOnMountOrArgChange: true,
   });
   let content;
-  if (isLoading) content = <PulseLoader color={"#FFF"} />;
+  if (isLoading) content = () => {
+    return (
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          flexDirection: "column",
+          paddingTop: "20px",
+        }}
+      >
+        <PulseLoader color={"#FFF"} />;
+      </div>
+    );
+  }
   if (isError) {
     content = <p className="errmsg">{error?.data?.message}</p>;
   }
